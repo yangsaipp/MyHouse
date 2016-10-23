@@ -78,4 +78,26 @@ class SoldDataProcessorTest extends Specification {
 		then:
 		processData.buildType == testData.buildType
 	}
+	
+	def "should processor specified date deal data"() {
+		given:
+		String testUrl = 'http://sz.lianjia.com/chengjiao/baoan/'
+		
+		List <SoldData> processDataList = []
+		when:
+		Spider.create(new SoldDataProcessor(filterDealDate:'2016.10')).
+				addUrl(testUrl).
+				addPipeline({ResultItems resultItems, Task task ->
+						if(resultItems.skip) {
+							return;
+						}
+						processDataList.add(resultItems.get(SoldDataProcessor.KEY_SOLDDATA))
+					} as Pipeline).
+				thread(5).
+				run();
+		then:
+		processDataList.each {
+			assert it.jiaoyiMonth == '2016.10'
+		}
+	}
 }

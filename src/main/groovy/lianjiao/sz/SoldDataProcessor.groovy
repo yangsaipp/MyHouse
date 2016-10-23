@@ -27,6 +27,9 @@ class SoldDataProcessor implements PageProcessor {
 	// 房屋成交信息 如：http://sz.lianjia.com/chengjiao/105100384939.html
 //	public static final String URL_DETAIL = "http://sz\\.lianjia\\.com/chengjiao/\\d+\\.html"
 	
+	// 抓取指定交易月份的数据，如：2015.04
+	String filterDealDate
+	
 	@Override
 	public void process(Page page) {
 //		List<String> relativeUrl = page.getHtml().xpath("//li[@class='item clearfix']/div/a/@href").all();
@@ -48,15 +51,10 @@ class SoldDataProcessor implements PageProcessor {
 //			page.setSkip(true);
 //		}
 		
-		if(page.getUrl().regex(AREA_URL_LIST).match()) {	// 列表页面非第一页
+		if(page.getUrl().regex(AREA_URL_LIST).match() || page.getUrl().regex(AREA_URL_LIST_FIRST).match()) {	// 列表页面
 			// 加入当前列表页面里的详情连接到待分析列表
 			addDetailUrl(page)
-			page.setSkip(true);
-		}else if(page.getUrl().regex(AREA_URL_LIST_FIRST).match()) {	// 列表页面第一页
-			// 加入当前列表页面里的详情连接到待分析列表
-			addDetailUrl(page)
-			// 加入本列表页面翻页url
-			addPageListUrl(page)
+			addNextPageListUrl(page)
 			page.setSkip(true);
 		}else {	// 详情页面
 			// 处理详情页面
@@ -64,25 +62,75 @@ class SoldDataProcessor implements PageProcessor {
 		}
 	}
 	
-	// 加入翻页url
-	void addPageListUrl(Page page) {
-		// 翻页jsonString
+	int cmpareFilterDealDate(String dealDate) {
+		if(filterDealDate) {
+			if(filterDealDate == dealDate) {
+				return 0
+			}else if(filterDealDate > dealDate) {
+				return -1
+			}else {
+				return 1
+			}
+		}else {
+			return 0
+		}
+		
+	}
+	
+	int cmparePageListDealDate(Page page) {
+		int run_val
+		// 获取列表页面所有的交易时间
+		List<String> dealDateList = page.getHtml().xpath("//div[@class=\"leftContent\"]/ul[@class='listContent']/li//div[@class='dealDate']/text()").all();
+		dealDateList.each {
+			def dealDate = it.substring(0, 7)
+			run_val = cmpareFilterDealDate(dealDate)
+			if(run_val == -1) {
+				return
+			}
+		}
+		
+		return run_val
+	}
+	
+	// 加入下一页的列表页面url
+	void addNextPageListUrl(Page page) {
+		if(cmparePageListDealDate(page) < 0) {	// 页面交易时间比查询时间早，不翻页
+			return;
+		}
+		
+		// 获取页面翻页信息
 		String jsonString = page.getHtml().xpath("//div[@class=\"leftContent\"]//div[@class='page-box house-lst-page-box']/@page-data").toString()
 		def pageNoInfo = new JsonSlurper().parseText(jsonString)
 		int curPage = pageNoInfo.curPage
 		int totalPage = pageNoInfo.totalPage
-		curPage ++ // 从第二页开始
-		List<String> pageSizeUrl = []
-		while(curPage <= totalPage) {
-			pageSizeUrl << page.getUrl().toString() + "pg$curPage"
-			curPage ++
+		if(curPage == totalPage){		// 最后一页
+			return;
 		}
-		page.addTargetRequests(pageSizeUrl);
+		
+		List<String> pageUrl = page.getUrl().toString().split('/') as List
+		if(pageUrl[-1].startsWith('pg')) {
+			pageUrl[-1] = "pg${curPage + 1}"
+		}else {
+			pageUrl << "pg${curPage + 1}"
+		}
+//		println pageUrl.join('/')
+		page.addTargetRequest(pageUrl.join('/'));
 	}
 	
 	// 加入当前列表页面里的详情连接到待分析列表
 	void addDetailUrl(Page page) {
-		page.addTargetRequests(page.getHtml().xpath("//div[@class=\"leftContent\"]/ul[@class='listContent']/li/a[@class='img']/@href").all());
+		
+		List<String> detailUrl = page.getHtml().xpath("//div[@class=\"leftContent\"]/ul[@class='listContent']/li/a[@class='img']/@href").all()
+		// 符合条件的交易记录才抓取
+		List<String> dealDateList = page.getHtml().xpath("//div[@class=\"leftContent\"]/ul[@class='listContent']/li//div[@class='dealDate']/text()").all();
+		int index = 0
+		dealDateList.each {
+			def dealDate = it.substring(0, 7)
+			if(cmpareFilterDealDate(dealDate) == 0) {
+				page.addTargetRequest(detailUrl[index]);
+			}
+			index ++
+		}
 	}
 
 	void processDetailsPage(Page page) {
@@ -91,6 +139,7 @@ class SoldDataProcessor implements PageProcessor {
 		soldData.houseNo = page.getHtml().xpath('//div[@class=\'wrapper\']/div[@class=\'deal-bread\']/span[@class=\'house-code\']/text()').toString().split('：')[1]
 		if(!soldData.houseNo) {
 			page.setSkip(true);
+			return
 		}
 		
 		soldData.city = '深圳'
@@ -133,6 +182,11 @@ class SoldDataProcessor implements PageProcessor {
 		// 成交时间(月份) 例如：2015.04
 		soldData.jiaoyiMonth = soldData.jiaoyiTime.substring(0, 7)
 		
+		if(cmpareFilterDealDate(soldData.jiaoyiMonth) != 0) {
+			page.setSkip(true);
+			return
+		}
+		
 		soldData.url = page.getUrl().toString()
 		
 		page.putField(KEY_SOLDDATA, soldData);
@@ -144,9 +198,12 @@ class SoldDataProcessor implements PageProcessor {
 	}
 
 	static main(args) {
-		Spider.create(new SoldDataProcessor()).
-				addUrl('http://sz.lianjia.com/chengjiao/baoan/').
-				addPipeline(new CSVFilePipeline('e:/data/baoan')).
+		Spider.create(new SoldDataProcessor(filterDealDate: '2016.09')).
+				addUrl(
+//					'http://sz.lianjia.com/chengjiao/baoan/'
+					'http://sz.lianjia.com/chengjiao/nanshan/'
+					).
+				addPipeline(new CSVFilePipeline('e:/data/nanshan')).
 //				addPipeline(new ConsolePipeline()).
 				thread(5).
 				run();
