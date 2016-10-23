@@ -33,7 +33,9 @@ class SoldData {
 	String totalCost
 	// 单价 
 	String price
-	// 成交时间
+	// 成交时间(月份) 例如：2015.04
+	String jiaoyiMonth
+	// 成交时间 例如：2015.04.22
 	String jiaoyiTime
 	// 房源编号
 	String houseNo

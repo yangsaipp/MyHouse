@@ -38,6 +38,7 @@ class SoldDataProcessorTest extends Specification {
 			totalCost: '190',
 			// 单价 
 			price: '15918',
+			jiaoyiMonth: '2016.10',
 			// 成交时间
 			jiaoyiTime: '2016.10.05',
 			// 房源编号
@@ -50,7 +51,7 @@ class SoldDataProcessorTest extends Specification {
 		Spider.create(new SoldDataProcessor()).
 				addUrl(testUrl).
 				addPipeline({ResultItems resultItems, Task task ->
-						processData = resultItems.get("soldData");
+						processData = resultItems.get(SoldDataProcessor.KEY_SOLDDATA);
 					} as Pipeline).
 				thread(5).
 				run();
@@ -70,7 +71,7 @@ class SoldDataProcessorTest extends Specification {
 		Spider.create(new SoldDataProcessor()).
 				addUrl(testUrl).
 				addPipeline({ResultItems resultItems, Task task ->
-						processData = resultItems.get("soldData");
+						processData = resultItems.get(SoldDataProcessor.KEY_SOLDDATA);
 					} as Pipeline).
 				thread(5).
 				run();

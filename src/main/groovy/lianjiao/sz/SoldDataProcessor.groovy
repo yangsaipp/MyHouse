@@ -4,6 +4,7 @@ import us.codecraft.webmagic.Page
 import us.codecraft.webmagic.Site
 import us.codecraft.webmagic.Spider
 import us.codecraft.webmagic.pipeline.ConsolePipeline
+import us.codecraft.webmagic.pipeline.JsonFilePipeline
 import us.codecraft.webmagic.processor.PageProcessor
 
 /*
@@ -17,7 +18,7 @@ class SoldDataProcessor implements PageProcessor {
 	.addHeader("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
 	.setCharset("UTF-8");
 	
-	
+	static final String KEY_SOLDDATA = 'soldData'
 	// 区域成交列表第一页url   如 宝安区所有http://sz.lianjia.com/chengjiao/baoan/
 	public static final String AREA_URL_LIST_FIRST = "http://sz\\.lianjia\\.com/chengjiao/\\w+/"
 	// 区域成交列表除第一页之外的url   如 宝安区所有http://sz.lianjia.com/chengjiao/baoan/pg4
@@ -50,12 +51,13 @@ class SoldDataProcessor implements PageProcessor {
 		if(page.getUrl().regex(AREA_URL_LIST).match()) {	// 列表页面非第一页
 			// 加入当前列表页面里的详情连接到待分析列表
 			addDetailUrl(page)
-			
+			page.setSkip(true);
 		}else if(page.getUrl().regex(AREA_URL_LIST_FIRST).match()) {	// 列表页面第一页
 			// 加入当前列表页面里的详情连接到待分析列表
 			addDetailUrl(page)
 			// 加入本列表页面翻页url
 			addPageListUrl(page)
+			page.setSkip(true);
 		}else {	// 详情页面
 			// 处理详情页面
 			processDetailsPage(page);
@@ -85,6 +87,12 @@ class SoldDataProcessor implements PageProcessor {
 
 	void processDetailsPage(Page page) {
 		SoldData soldData = new SoldData()
+		//　房屋编号
+		soldData.houseNo = page.getHtml().xpath('//div[@class=\'wrapper\']/div[@class=\'deal-bread\']/span[@class=\'house-code\']/text()').toString().split('：')[1]
+		if(!soldData.houseNo) {
+			page.setSkip(true);
+		}
+		
 		soldData.city = '深圳'
 		List<String> areaInfos = page.getHtml().xpath('//div[@class=\'info fr\']/p/a/text()').all()
 		// 区域
@@ -121,12 +129,13 @@ class SoldDataProcessor implements PageProcessor {
 		soldData.price = page.getHtml().xpath('//div[@class=\'price\']/b/text()').toString()
 		// 交易时间
 		soldData.jiaoyiTime = page.getHtml().xpath('//div[@class=\'house-title\']/div[@class=\'wrapper\']/span/text()').toString().split(' ')[0]
-		//　房屋编号
-		soldData.houseNo = page.getHtml().xpath('//div[@class=\'wrapper\']/div[@class=\'deal-bread\']/span[@class=\'house-code\']/text()').toString().split('：')[1]
+		
+		// 成交时间(月份) 例如：2015.04
+		soldData.jiaoyiMonth = soldData.jiaoyiTime.substring(0, 7)
 		
 		soldData.url = page.getUrl().toString()
 		
-		page.putField('soldData',soldData);
+		page.putField(KEY_SOLDDATA, soldData);
 	}
 	
 	@Override
@@ -136,9 +145,9 @@ class SoldDataProcessor implements PageProcessor {
 
 	static main(args) {
 		Spider.create(new SoldDataProcessor()).
-				addUrl('http://sz.lianjia.com/chengjiao/baishizhou/pg2').
-//				addPipeline(new JsonFilePipeline("D:\\webmagic\\")).
-				addPipeline(new ConsolePipeline()).
+				addUrl('http://sz.lianjia.com/chengjiao/baoan/').
+				addPipeline(new CSVFilePipeline('e:/data/baoan')).
+//				addPipeline(new ConsolePipeline()).
 				thread(5).
 				run();
 	}
