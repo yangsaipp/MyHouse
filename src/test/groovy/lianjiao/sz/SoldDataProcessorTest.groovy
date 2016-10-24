@@ -2,7 +2,10 @@
 
 package lianjiao.sz
 
+import groovy.mock.interceptor.MockFor
+import groovy.mock.interceptor.StubFor
 import spock.lang.Specification
+import us.codecraft.webmagic.Page
 import us.codecraft.webmagic.ResultItems
 import us.codecraft.webmagic.Spider
 import us.codecraft.webmagic.Task
@@ -79,25 +82,61 @@ class SoldDataProcessorTest extends Specification {
 		processData.buildType == testData.buildType
 	}
 	
-	def "should processor specified date deal data"() {
+	def "should add expect list page url to processor when specified deal date"() {
 		given:
 		String testUrl = 'http://sz.lianjia.com/chengjiao/baoan/'
+		String dealDate = '2016.09'
+		List<String> urlList = []
+//		def pageMock = new StubFor(Page)
+//		pageMock.demand.addTargetRequest { 
+//			urlList << it
+//		}
+//		pageMock.ignore('getUrl')
+//		pageMock.ignore('getHtml')
+//		pageMock.ignore('setSkip')
 		
-		List <SoldData> processDataList = []
+		Page.metaClass.invokeMethod = { String name, args ->
+//			println "invoke: $name"
+			// 代理 Page的addTargetRequest方法
+			if(name == 'addTargetRequest') {
+				urlList << args[0]
+			}
+			def validMethod = Page.metaClass.getMetaMethod(name, args);
+			if(validMethod) {
+				validMethod.invoke(delegate, args)
+			}else {
+				Page.metaClass.invokeMissingMethod(delegate, name, args)
+			}
+		}
+		def processorMock = new StubFor(SoldDataProcessor)
+		// 宝安9月份成交数据199条,翻页8次
+		processorMock.demand.addDetailUrl(8) { println "add deal detail page of list page url ${it.getUrl()} " }
+		processorMock.ignore('addNextPageListUrl')
 		when:
-		Spider.create(new SoldDataProcessor(filterDealDate:'2016.10')).
+		processorMock.use {
+//			pageMock.use {
+				Spider.create(new SoldDataProcessor(filterDealDate:dealDate)).
 				addUrl(testUrl).
 				addPipeline({ResultItems resultItems, Task task ->
 						if(resultItems.skip) {
 							return;
 						}
-						processDataList.add(resultItems.get(SoldDataProcessor.KEY_SOLDDATA))
 					} as Pipeline).
 				thread(5).
 				run();
-		then:
-		processDataList.each {
-			assert it.jiaoyiMonth == '2016.10'
+//			}
 		}
+		then:
+		groovy.test.GroovyAssert.assertArrayEquals(urlList as String[], ['http://sz.lianjia.com/chengjiao/baoan/pg2',
+			'http://sz.lianjia.com/chengjiao/baoan/pg3',
+			'http://sz.lianjia.com/chengjiao/baoan/pg4',
+			'http://sz.lianjia.com/chengjiao/baoan/pg5',
+			'http://sz.lianjia.com/chengjiao/baoan/pg6',
+			'http://sz.lianjia.com/chengjiao/baoan/pg7',
+			'http://sz.lianjia.com/chengjiao/baoan/pg8'
+			] as String[])
+//		processDataList.each {
+//			assert it.jiaoyiMonth == '2016.10'
+//		}
 	}
 }
