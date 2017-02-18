@@ -2,7 +2,7 @@ package lianjiao.sz
 
 class CSVFileMerger {
 	static main(args) {
-		String path = 'e:/data/baoan/sz.lianjia.com/'
+		String path = 'e:/data/futian/sz.lianjia.com/'
 		String suffix = '.csv'
 		int num = 0
 		File mergeFile = new File('e:/data/', 'merge-data-' + new Date().format('yyyy-MM-dd-HHmm') + suffix)

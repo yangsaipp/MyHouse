@@ -198,12 +198,13 @@ class SoldDataProcessor implements PageProcessor {
 	}
 
 	static main(args) {
-		Spider.create(new SoldDataProcessor(filterDealDate: '2016.09')).
+		Spider.create(new SoldDataProcessor()).
 				addUrl(
 //					'http://sz.lianjia.com/chengjiao/baoan/'
-					'http://sz.lianjia.com/chengjiao/nanshan/'
+//					'http://sz.lianjia.com/chengjiao/nanshan/'
+					'http://sz.lianjia.com/chengjiao/futian/'
 					).
-				addPipeline(new CSVFilePipeline('e:/data/nanshan')).
+				addPipeline(new CSVFilePipeline('e:/data/futian')).
 //				addPipeline(new ConsolePipeline()).
 				thread(5).
 				run();
