@@ -10,6 +10,8 @@
 // Apply the groovy plugin to add support for Groovy
 apply plugin: 'groovy'
 
+groupId = 'org.yancey'
+
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use 'jcenter' for resolving your dependencies.
@@ -23,7 +25,12 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.5'
 	compile 'us.codecraft:webmagic-core:0.5.3'
 	compile 'us.codecraft:webmagic-extension:0.5.3'
+	compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'
+	runtime group: 'org.xerial', name: 'sqlite-jdbc', version: '3.16.1'
     // We use the awesome Spock testing and specification framework
-    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-    testCompile 'junit:junit:4.12'
+//    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+//    testCompile 'junit:junit-dep:4.12'
+	testCompile("org.spockframework:spock-core:1.0-groovy-2.4") {
+		exclude group: "org.codehaus.groovy"
+	}
 }
