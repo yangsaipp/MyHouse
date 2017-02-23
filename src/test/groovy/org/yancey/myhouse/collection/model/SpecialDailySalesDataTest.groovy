@@ -13,4 +13,17 @@ class SpecialDailySalesDataTest extends SpecialDataTest<DailySalesData> {
 		then:
 		crawlData.quyu == '南山区'
 	}
+	
+	def "各区每日可销售房屋数据应该不被抓取"() {
+		// 街道
+		when:
+		testCrawl('http://sz.lianjia.com/ershoufang/nanshanqu/')
+		then:
+		crawlData == null
+		
+		when:
+		testCrawl('http://sz.lianjia.com/ershoufang/yantianqu/')
+		then:
+		crawlData == null
+	}
 }

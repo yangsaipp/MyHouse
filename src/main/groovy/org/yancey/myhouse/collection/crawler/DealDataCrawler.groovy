@@ -29,4 +29,5 @@ public class DataCrawler {
 				, pipeline, DealData, DailySalesData)
 				.addUrl(url)
 	}
+	
 }

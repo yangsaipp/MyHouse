@@ -20,10 +20,10 @@ class DailySalesData implements AfterExtractor {
 	@ExtractBy('//div[@class=\'contentBottom clear\']/div[@class=\'crumbs fl\']/a[2]/regex("<a.+>(.+)二手房</a>", 1)')
 	String city
 	/** 区域 */
-	@ExtractBy('//div[@class=\'contentBottom clear\']/div[@class=\'crumbs fl\']/a[3]/regex("<a.+>([^,]+).*二手房</a>", 1)')
+	@ExtractBy('//div[@class=\'position\']//div[@data-role=\'ershoufang\']/div[1]/a[@class="selected"]/text()')
 	String quyu
 	/** 街道 */
-	@ExtractBy('//div[@class=\'contentBottom clear\']/div[@class=\'crumbs fl\']/h1/a/regex("<a.+>(.+)二手房</a>", 1)')
+	@ExtractBy('//div[@class=\'position\']//div[@data-role=\'ershoufang\']/div[2]/a[@class="selected"]/text()')
 	String jiedao
 	/** 房源总数 */
 	@ExtractBy('//div[@class=\'leftContent\']//h2[@class=\'total fl\']/span/regex("<span.*>\\s(\\d+)\\s</span>", 1)')
@@ -35,5 +35,9 @@ class DailySalesData implements AfterExtractor {
 	public void afterProcess(Page page) {
 		date = new Date().clearTime()
 //		println page.getHtml().xpath('//div[@class=\'contentBottom clear\']/div[@class=\'crumbs fl\']/a[3]/regex("<a.+>(\\w+)[\\w,]*二手房</a>", 1)').get()
+		if(jiedao == null) {
+			page.setSkip(true)
+		}
+			
 	}
 }
