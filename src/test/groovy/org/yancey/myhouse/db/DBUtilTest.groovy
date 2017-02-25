@@ -14,8 +14,8 @@ class DBUtilTest extends Specification {
 
 	def setupSpec() {
 		println 'Setup spec.'
-		sql.execute("drop table if exists person")
-		sql.execute("create table person (id integer, name string)")
+		sql.execute("drop table if exists Person")
+		sql.execute("create table Person (id integer, name string)")
 	}
 
 	def setup() {
@@ -26,14 +26,26 @@ class DBUtilTest extends Specification {
 		given:
 
 		when:
-		def people = sql.dataSet("person")
+		def people = sql.dataSet("Person")
 		people.add(id:1, name:"leo")
 		people.add(id:2, name:'yui')
-		List results = sql.rows("select * from person where id in (?, ?)", [1, 2]);
+		List results = sql.rows("select * from Person where id in (?, ?)", [1, 2]);
 		def peopleNames = results.collect {it.name}.join(',')
 
 		then:
 		peopleNames == 'leo,yui'
+	}
+	
+	def "should query data success."() {
+		given:
+		def people = sql.dataSet("Person")
+		people.add(id:1, name:"leo")
+		when:
+		List results = DBUtil.rows(new Person(id:1), 'id');
+		def peopleNames = results.collect {it.name}
+
+		then:
+		peopleNames == ['leo']
 	}
 	
 	def "should exist table."() {
@@ -84,12 +96,12 @@ class DBUtilTest extends Specification {
 
 	def cleanup() {
 		println 'clean up'
-		sql.execute('delete from person')
+		sql.execute('delete from Person')
 	}
 
 	def cleanupSpec() {
 		println 'clean spec.'
-		sql.execute("drop table if exists person")
+		sql.execute("drop table if exists Person")
 		sql.close();
 	}
 }

@@ -9,11 +9,10 @@ import us.codecraft.webmagic.pipeline.PageModelPipeline
 
 @Title("特殊页面（数据不完整）抓取成交数据(DealData)准确性测试")
 class SpecialDealDataTest extends SpecialDataTest<DealData> {
-	
-	
+	def classes = [DealData]
 	def "信息不全的房屋信息应该能正确处理"() {
 		when:
-		testCrawl('http://sz.lianjia.com/chengjiao/SZ0000852081.html')
+		testCrawl(classes, 'http://sz.lianjia.com/chengjiao/SZ0000852081.html')
 
 		then: 
 		crawlData != null
@@ -24,7 +23,7 @@ class SpecialDealDataTest extends SpecialDataTest<DealData> {
 	
 	def "无房屋构建年代的房屋信息应该能获取到建筑类型"() {
 		when:
-		testCrawl('http://sz.lianjia.com/chengjiao/105100461210.html')
+		testCrawl(classes, 'http://sz.lianjia.com/chengjiao/105100461210.html')
 
 		then:
 		crawlData != null
@@ -34,7 +33,7 @@ class SpecialDealDataTest extends SpecialDataTest<DealData> {
 	
 	def "成交价格带小数点的房屋信息应该能获取到"() {
 		when:
-		testCrawl('http://sz.lianjia.com/chengjiao/105100384434.html')
+		testCrawl(classes, 'http://sz.lianjia.com/chengjiao/105100384434.html')
 			
 		then:
 		crawlData != null

@@ -12,8 +12,8 @@ import us.codecraft.webmagic.pipeline.PageModelPipeline
 class SpecialDataTest<T> extends Specification {
 	T crawlData
 	
-	void testCrawl(url) {
-		DataCrawler.testCrawl({ T data, Task task-> crawlData = data } as PageModelPipeline, url)
+	void testCrawl(classes, url) {
+		DataCrawler.testCrawl({ T data, Task task-> crawlData = data } as PageModelPipeline, classes , url)
 	}
 	
 }

@@ -1,5 +1,6 @@
 package org.yancey.myhouse.db
 
+import groovy.sql.GroovyRowResult
 import groovy.sql.Sql
 
 import java.sql.SQLException
@@ -9,6 +10,8 @@ import org.apache.commons.dbcp.BasicDataSource
 import com.alibaba.fastjson.JSON
 
 
+
+
 class DBUtil {
 //	static def BasicDataSource dataSource = new BasicDataSource(driverClassName: 'org.sqlite.JDBC',
 //		url: 'jdbc:sqlite:sample.db')
@@ -16,8 +19,10 @@ class DBUtil {
 	static def BasicDataSource dataSource = new BasicDataSource(driverClassName: 'org.sqlite.JDBC',
 		url: 'jdbc:sqlite:test.db')
 	
+	static String DATE_FORMATTER = "yyyy-MM-dd HH:mm:ss.SSS"
+	
 	static Sql getSql() {
-		println 'get sql instance'
+//		println 'get sql instance'
 		return new Sql(dataSource);
 	}
 	
@@ -31,10 +36,32 @@ class DBUtil {
 		}
 	}
 	
+	static boolean isExist(object, String... fields) {
+		return !rows(object, fields).isEmpty();
+	}
+	
+	static List<GroovyRowResult> rows(object, String... fields) {
+		StringBuilder buffer = new StringBuilder("select * from ");
+		String table = getTableName(object)
+		List param = []
+		buffer.append(table);
+		if(fields) {
+			buffer.append(" where ");
+			for(String field : fields) {
+				buffer.append(" $field = ? ");
+				param << object[field]
+			}
+		}
+		StringBuilder paramBuffer = new StringBuilder();
+		
+		List<GroovyRowResult> result = getSql().rows(buffer.toString(), param)
+		return result
+	}
+	
 	static void add(object) {
 		assert object != null
 		def people = getSql().dataSet(getTableName(object))
-		def objMap = JSON.parseObject(JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss.SSS"))
+		def objMap = JSON.parseObject(JSON.toJSONStringWithDateFormat(object, DATE_FORMATTER))
 		people.add(objMap)
 		
 	}

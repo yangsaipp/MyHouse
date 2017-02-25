@@ -10,7 +10,7 @@ import us.codecraft.webmagic.Task
 
 @Title("常规页面抓取每日可售房屋数据(DailySalesData)准确性测试")
 class DailySalesDataTest extends Specification {
-	
+	@Shared classes = [DailySalesData]
 	@Shared DailySalesData dailySalesData
 	@Shared String url = 'http://sz.lianjia.com/ershoufang/baishida/'
 	@Shared pipeline = { DailySalesData d, Task task->
@@ -18,7 +18,7 @@ class DailySalesDataTest extends Specification {
 		}
 	
 	def setupSpec() {
-		DataCrawler.testCrawl(pipeline, url)
+		DataCrawler.testCrawl(pipeline, classes, url)
 	}
 	
 	def "数据不能为空"() {

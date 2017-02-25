@@ -16,7 +16,6 @@ import us.codecraft.webmagic.model.formatter.DateFormatter
  */
 @Canonical
 @TargetUrl('http://*.lianjia.com/chengjiao/\\w+.html$')
-@HelpUrl('http://*.lianjia.com/chengjiao/\\w+/pg\\d/')
 class DealData extends BaseData implements AfterExtractor {
 	/** 城市 */
 	@ExtractBy('//div[@class=\'wrapper\']/div[@class=\'deal-bread\']/a[2]/regex("<a.+>(.+)二手房成交价格</a>", 1)')
@@ -81,10 +80,24 @@ class DealData extends BaseData implements AfterExtractor {
 
 	@Override
 	public void afterProcess(Page page) {
+		if(isOverTime()) {
+			page.setSkip(true)
+		}
+		
 		this.url = page.getUrl()
 //		println page.getHtml().xpath('//div[@class=\'house-title\']/div[@class="wrapper"]/span/regex("<span.*>([\\d\\.]+)\\s链家成交</span>",1)').get() 
 //		println page.getHtml().xpath('//div[@class=\'overview\']/div[@class="info fr"]/div[@class="price"]/span[@class="dealTotalPrice"]/i/text()').all() 
 		this.afterCrawler()
 		
+		
+	}
+	
+	/**
+	 * 成交日期是否超出指定的时间
+	 * @param page
+	 * @return	true 是   false 否
+	 */
+	boolean isOverTime() {
+		return Condition.dbDealDate.compareTo(dealDate) == 1
 	}
 }

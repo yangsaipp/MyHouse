@@ -19,7 +19,7 @@ class OldDealDataTest extends Specification {
 		String url = 'http://sz.lianjia.com/chengjiao/105100384939.html'
 		DealData dealData
 		when:
-		DataCrawler.testCrawl(pipe, url)
+		DataCrawler.testCrawl(pipe, [DealData], url)
 		
 		then:
 		1 * pipe.process(_ as DealData, _ as Task) >> { DealData d, Task task->

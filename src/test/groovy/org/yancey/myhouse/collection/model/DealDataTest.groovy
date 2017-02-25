@@ -1,5 +1,6 @@
 package org.yancey.myhouse.collection.model
 
+import org.yancey.myhouse.collection.crawler.DBPipeline
 import org.yancey.myhouse.collection.crawler.DataCrawler
 
 import spock.lang.Shared
@@ -9,14 +10,14 @@ import us.codecraft.webmagic.Task
 
 @Title("常规页面抓取成交数据(DealData)准确性测试")
 class DealDataTest extends Specification {
-	
+	@Shared classes = [DealData]
 	@Shared DealData dealData
 	@Shared String url = 'http://sz.lianjia.com/chengjiao/105100384939.html'
 	@Shared pipeline = { d, Task task->
 		dealData = d
 	}
 	def setupSpec() {
-		DataCrawler.testCrawl(pipeline, url)
+		DataCrawler.testCrawl(new DBPipeline<Object>(), classes, url)
 	}
 	
 	def "数据不能为空"() {
