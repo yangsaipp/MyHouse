@@ -6,9 +6,15 @@ import java.sql.SQLException
 
 import org.apache.commons.dbcp.BasicDataSource
 
+import com.alibaba.fastjson.JSON
+
+
 class DBUtil {
+//	static def BasicDataSource dataSource = new BasicDataSource(driverClassName: 'org.sqlite.JDBC',
+//		url: 'jdbc:sqlite:sample.db')
+	
 	static def BasicDataSource dataSource = new BasicDataSource(driverClassName: 'org.sqlite.JDBC',
-		url: 'jdbc:sqlite:sample.db')
+		url: 'jdbc:sqlite:test.db')
 	
 	static Sql getSql() {
 		println 'get sql instance'
@@ -25,21 +31,26 @@ class DBUtil {
 		}
 	}
 	
-	static String save(object) {
-		// TODO:保存数据
+	static void add(object) {
+		assert object != null
+		def people = getSql().dataSet(getTableName(object))
+		def objMap = JSON.parseObject(JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss.SSS"))
+		people.add(objMap)
 		
 	}
 	
 	// 根据给定的对象的类型创建表
-	static boolean createTable(object) {
-		assert object != null
-		if(isExistTable(object)) {
-			return true
+	static boolean createTable(Object... objects) {
+		assert objects != null
+		for(Object object : objects) {
+			if(isExistTable(object)) {
+				return true
+			}
+			def createTableStr = buildCreateTable(object);
+			println "create table : $createTableStr"
+			getSql().execute(createTableStr)
 		}
 		
-		def createTableStr = buildCreateTable(object);
-		println "create table : $createTableStr"
-		getSql().execute(createTableStr)
 		return true
 	}
 	

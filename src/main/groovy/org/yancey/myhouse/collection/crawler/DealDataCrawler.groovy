@@ -2,6 +2,7 @@ package org.yancey.myhouse.collection.crawler;
 
 import org.yancey.myhouse.collection.model.DailySalesData
 import org.yancey.myhouse.collection.model.DealData
+import org.yancey.myhouse.db.DBUtil;
 
 import us.codecraft.webmagic.Site
 import us.codecraft.webmagic.Spider
@@ -30,4 +31,9 @@ public class DataCrawler {
 				.addUrl(url)
 	}
 	
+	static void main(String[] args) {
+		DBUtil.createTable(DealData, DailySalesData)
+//		crawl(new DBPipeline<Object>(), 'http://sz.lianjia.com/ershoufang/luohuqu/')
+		crawl(new DBPipeline<Object>(), 'http://sz.lianjia.com/chengjiao/luohuqu/pg1/')
+	}
 }

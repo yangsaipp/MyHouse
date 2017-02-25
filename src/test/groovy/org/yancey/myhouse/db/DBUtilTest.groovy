@@ -1,5 +1,7 @@
 package org.yancey.myhouse.db
 
+import groovy.sql.Sql
+
 import org.yancey.myhouse.collection.model.DailySalesData
 import org.yancey.myhouse.collection.model.DealData
 
@@ -8,7 +10,7 @@ import spock.lang.Specification
 
 class DBUtilTest extends Specification {
 
-	@Shared sql = DBUtil.getSql()
+	@Shared Sql sql = DBUtil.getSql()
 
 	def setupSpec() {
 		println 'Setup spec.'
@@ -56,6 +58,28 @@ class DBUtilTest extends Specification {
 		
 		cleanup:
 		DBUtil.dropTable(DealData)
+	}
+	
+	def "should add data success ."() {
+		given:
+		
+		DailySalesData data = new DailySalesData(city:'深圳',quyu: '罗湖区', jiedao: '百仕达', num: 429, date: Date.parse('yyyy-MM-dd', '2017-02-19'));
+		DBUtil.createTable(data)
+		def dailySalesData
+		
+		when:
+		DBUtil.add(data)
+		dailySalesData = sql.firstRow("select * from DailySalesData where city = ?", ['深圳'])
+		
+		then:
+		dailySalesData.city == '深圳'
+		dailySalesData.quyu == '罗湖区'
+		dailySalesData.jiedao == '百仕达'
+		dailySalesData.num == 429
+		Date.parse('yyyy-MM-dd', dailySalesData.date) == Date.parse('yyyy-MM-dd', '2017-02-19')
+		
+		cleanup:
+		DBUtil.dropTable(data)
 	}
 
 	def cleanup() {

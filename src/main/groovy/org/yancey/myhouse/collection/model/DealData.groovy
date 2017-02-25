@@ -5,6 +5,7 @@ import us.codecraft.webmagic.Page
 import us.codecraft.webmagic.model.AfterExtractor
 import us.codecraft.webmagic.model.annotation.ExtractBy
 import us.codecraft.webmagic.model.annotation.Formatter
+import us.codecraft.webmagic.model.annotation.HelpUrl
 import us.codecraft.webmagic.model.annotation.TargetUrl
 import us.codecraft.webmagic.model.formatter.DateFormatter
 
@@ -15,7 +16,8 @@ import us.codecraft.webmagic.model.formatter.DateFormatter
  */
 @Canonical
 @TargetUrl('http://*.lianjia.com/chengjiao/\\w+.html$')
-class DealData implements AfterExtractor {
+@HelpUrl('http://*.lianjia.com/chengjiao/\\w+/pg\\d/')
+class DealData extends BaseData implements AfterExtractor {
 	/** 城市 */
 	@ExtractBy('//div[@class=\'wrapper\']/div[@class=\'deal-bread\']/a[2]/regex("<a.+>(.+)二手房成交价格</a>", 1)')
 	String city
@@ -53,16 +55,16 @@ class DealData implements AfterExtractor {
 	Integer buildTime
 	
 	/** 建筑类型 如：板楼 */
-	@ExtractBy('//div[@class=\'overview\']/div[@class="info fr"]/div[@class="msg"]/span[@class="sp03"]/regex("<label.*>.+</label>(\\d+)年建(.+)</span>", 2)')
+	@ExtractBy('//div[@class=\'overview\']/div[@class="info fr"]/div[@class="msg"]/span[@class="sp03"]/regex("<label.*>.+</label>(?:\\d+年建)?(.+)</span>", 1)')
 	String buildType
 	
 	/** 成交价（万） */
 	@ExtractBy('//div[@class=\'overview\']/div[@class="info fr"]/div[@class="price"]/span[@class="dealTotalPrice"]/i/text()')
-	Integer totalCost
+	Double totalCost
 	
 	/** 单价  */
 	@ExtractBy('//div[@class=\'overview\']/div[@class="info fr"]/div[@class="price"]//@class="dealTotalPrice"/b/text()')
-	Integer price
+	Double price
 	
 	/** 成交时间 */
 	@Formatter(value = "yyyy.MM.dd",formatter = DateFormatter)
@@ -82,6 +84,7 @@ class DealData implements AfterExtractor {
 		this.url = page.getUrl()
 //		println page.getHtml().xpath('//div[@class=\'house-title\']/div[@class="wrapper"]/span/regex("<span.*>([\\d\\.]+)\\s链家成交</span>",1)').get() 
 //		println page.getHtml().xpath('//div[@class=\'overview\']/div[@class="info fr"]/div[@class="price"]/span[@class="dealTotalPrice"]/i/text()').all() 
+		this.afterCrawler()
 		
 	}
 }

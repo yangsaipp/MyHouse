@@ -8,29 +8,45 @@
  */
 
 // Apply the groovy plugin to add support for Groovy
-apply plugin: 'groovy'
+buildscript {
+	ext { springBootVersion = '1.5.1.RELEASE' }
+	repositories {
+		// NOTE: You should declare only repositories that you need here
+		maven { url "http://repo.spring.io/release" }
+		maven { url "http://repo.spring.io/milestone" }
+		maven { url "http://repo.spring.io/snapshot" }
+		jcenter()
+	}
+	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
+}
 
-groupId = 'org.yancey'
+apply plugin: 'groovy'
+apply plugin: 'project-report'
+//apply plugin: 'org.springframework.boot'
+
+//groupId = 'org.yancey'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
-    // Use 'jcenter' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+	// Use 'jcenter' for resolving your dependencies.
+	// You can declare any Maven/Ivy/file repository here.
+	jcenter()
 }
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-    // We use the latest groovy 2.x version for building this library
-    compile 'org.codehaus.groovy:groovy-all:2.4.5'
+	// We use the latest groovy 2.x version for building this library
+	compile 'org.codehaus.groovy:groovy-all:2.4.5'
 	compile 'us.codecraft:webmagic-core:0.5.3'
 	compile 'us.codecraft:webmagic-extension:0.5.3'
 	compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'
 	runtime group: 'org.xerial', name: 'sqlite-jdbc', version: '3.16.1'
-    // We use the awesome Spock testing and specification framework
-//    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-//    testCompile 'junit:junit-dep:4.12'
-	testCompile("org.spockframework:spock-core:1.0-groovy-2.4") {
-		exclude group: "org.codehaus.groovy"
-	}
+//	compile("org.springframework.boot:spring-boot-starter")
+	compile 'com.alibaba:fastjson:1.2.24'
+	
+
+	// We use the awesome Spock testing and specification framework
+	//    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+	//    testCompile 'junit:junit-dep:4.12'
+	testCompile("org.spockframework:spock-core:1.0-groovy-2.4") { exclude group: "org.codehaus.groovy" }
 }

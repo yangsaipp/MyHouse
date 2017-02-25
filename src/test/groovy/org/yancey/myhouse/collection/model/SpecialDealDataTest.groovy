@@ -21,4 +21,25 @@ class SpecialDealDataTest extends SpecialDataTest<DealData> {
 		crawlData.huxing == null
 		crawlData.chaoxiang == '暂无数据'
 	}
+	
+	def "无房屋构建年代的房屋信息应该能获取到建筑类型"() {
+		when:
+		testCrawl('http://sz.lianjia.com/chengjiao/105100461210.html')
+
+		then:
+		crawlData != null
+		crawlData.buildType == '板塔结合'
+		crawlData.buildTime == null
+	}
+	
+	def "成交价格带小数点的房屋信息应该能获取到"() {
+		when:
+		testCrawl('http://sz.lianjia.com/chengjiao/105100384434.html')
+			
+		then:
+		crawlData != null
+		crawlData.totalCost == 93.5
+	}
+	
+	
 }

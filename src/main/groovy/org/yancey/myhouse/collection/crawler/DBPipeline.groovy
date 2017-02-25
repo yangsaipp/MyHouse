@@ -9,6 +9,6 @@ public class DBPipeline<T> implements PageModelPipeline<T> {
 	
 	@Override
 	public void process(T t, Task task) {
-		DBUtil.save(t)
+		DBUtil.add(t)
 	}
 }

@@ -15,7 +15,7 @@ import us.codecraft.webmagic.model.annotation.TargetUrl
 @Canonical
 @TargetUrl(value='http://*.lianjia.com/ershoufang/\\w+/', sourceRegion = '//div[@data-role="ershoufang"]/div[2]')
 @HelpUrl(value='http://*.lianjia.com/ershoufang/\\w+/', sourceRegion = '//div[@data-role="ershoufang"]/div[1]')
-class DailySalesData implements AfterExtractor {
+class DailySalesData extends BaseData implements AfterExtractor {
 	/** 城市  */
 	@ExtractBy('//div[@class=\'contentBottom clear\']/div[@class=\'crumbs fl\']/a[2]/regex("<a.+>(.+)二手房</a>", 1)')
 	String city
@@ -28,16 +28,16 @@ class DailySalesData implements AfterExtractor {
 	/** 房源总数 */
 	@ExtractBy('//div[@class=\'leftContent\']//h2[@class=\'total fl\']/span/regex("<span.*>\\s(\\d+)\\s</span>", 1)')
 	Integer num 
-	/** 日期 */
-	Date date
+	/** 抓取日期 */
+	Date crawlerDate
 	
 	@Override
 	public void afterProcess(Page page) {
-		date = new Date().clearTime()
+		crawlerDate = new Date().clearTime()
 //		println page.getHtml().xpath('//div[@class=\'contentBottom clear\']/div[@class=\'crumbs fl\']/a[3]/regex("<a.+>(\\w+)[\\w,]*二手房</a>", 1)').get()
 		if(jiedao == null) {
 			page.setSkip(true)
 		}
-			
+		this.afterCrawler()
 	}
 }

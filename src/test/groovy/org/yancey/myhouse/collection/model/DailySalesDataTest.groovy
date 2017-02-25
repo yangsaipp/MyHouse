@@ -43,12 +43,12 @@ class DailySalesDataTest extends Specification {
 	def "房源总数 "() {
 		// 房源总数 
 		expect: 
-		dailySalesData.num == 429
+		dailySalesData.num == 435
 	}
 	
 	def "抓取时间"() {
 		// 抓取时间
 		expect: 
-		dailySalesData.date == Date.parse('yyyy-MM-dd', '2017-02-19')
+		dailySalesData.crawlerDate == Date.parse('yyyy-MM-dd', '2017-02-25')
 	}
 }
