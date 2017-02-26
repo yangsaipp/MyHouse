@@ -15,5 +15,6 @@ include 'shared'
 include 'api'
 include 'services:webservice'
 */
-
+include 'data-analyzer'
+include 'data-collection'
 rootProject.name = 'MyHouse'

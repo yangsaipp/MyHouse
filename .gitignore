@@ -5,3 +5,6 @@ bin/
 .project
 .classpath
 gradle.properties
+
+help-doc
+db

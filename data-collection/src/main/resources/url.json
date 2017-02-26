@@ -1,0 +1,30 @@
+{
+	"deal": {
+		"wh": {
+		    "jiangan":"http://wh.lianjia.com/chengjiao/jiangan/pg1/",
+			"jianghan":"http://wh.lianjia.com/chengjiao/jianghan/pg1/",
+			"qiaokou":"http://wh.lianjia.com/chengjiao/qiaokou/pg1/",
+			"dongxihu":"http://wh.lianjia.com/chengjiao/dongxihu/pg1/",
+			"wuchang":"http://wh.lianjia.com/chengjiao/wuchang/pg1/",
+			"qingshan":"http://wh.lianjia.com/chengjiao/qingshan/pg1/",
+			"hongshan":"http://wh.lianjia.com/chengjiao/hongshan/pg1/",
+			"hanyang":"http://wh.lianjia.com/chengjiao/hanyang/pg1/"
+		},
+		"sz": {
+		    "luohuqu":"http://sz.lianjia.com/chengjiao/luohuqu/pg1/",
+			"futianqu":"http://sz.lianjia.com/chengjiao/futianqu/pg1/",
+			"nanshanqu":"http://sz.lianjia.com/chengjiao/nanshanqu/pg1/",
+			"yantianqu":"http://sz.lianjia.com/chengjiao/yantianqu/pg1/",
+			"baoanqu":"http://sz.lianjia.com/chengjiao/baoanqu/pg1/",
+			"longgangqu":"http://sz.lianjia.com/chengjiao/longgangqu/pg1/",
+			"longhuaxinqu":"http://sz.lianjia.com/chengjiao/longhuaxinqu/pg1/",
+			"guangmingxinqu":"http://sz.lianjia.com/chengjiao/guangmingxinqu/pg1/",
+			"pingshanxinqu":"http://sz.lianjia.com/chengjiao/pingshanxinqu/pg1/",
+			"dapengxinqu":"http://sz.lianjia.com/chengjiao/dapengxinqu/pg1/"
+		}
+	},
+	"dailySales": {
+		"wh": "http://wh.lianjia.com/ershoufang/jiangan/",
+		"sz": "http://sz.lianjia.com/ershoufang/luohuqu/"
+	}
+}
