@@ -1,3 +1,4 @@
+document.write(document.cookie)
 select * from dealData order by createTime desc;
 http://sz.lianjia.com/chengjiao/futianqu/pg29/
 庆福园大厦
