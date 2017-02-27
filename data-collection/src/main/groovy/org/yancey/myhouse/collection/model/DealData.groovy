@@ -72,7 +72,7 @@ class DealData extends BaseData implements AfterExtractor {
 	
 	/** 房源编号 */
 	// <span class="house-code">链家编号：105100384939</span>
-	@ExtractBy('//div[@class=\'wrapper\']/div[@class=\'deal-bread\']/span[@class="house-code"]/regex("链家编号：(\\d+)", 1)')
+	@ExtractBy('//div[@class=\'wrapper\']/div[@class=\'deal-bread\']/span[@class="house-code"]/regex("链家编号：(\\w+)", 1)')
 	String houseNo
 	
 	/** 页面地址 */
@@ -83,7 +83,7 @@ class DealData extends BaseData implements AfterExtractor {
 		this.url = page.getUrl()
 //		println page.getHtml().xpath('//div[@class=\'house-title\']/div[@class="wrapper"]/span/regex("<span.*>([\\d\\.]+)\\s链家成交</span>",1)').get() 
 //		println page.getHtml().xpath('//div[@class=\'overview\']/div[@class="info fr"]/div[@class="price"]/span[@class="dealTotalPrice"]/i/text()').all() 
-		this.afterCrawler()
+		this.afterCrawler(page)
 	}
 	
 }

@@ -40,5 +40,14 @@ class SpecialDealDataTest extends SpecialDataTest<DealData> {
 		crawlData.totalCost == 93.5
 	}
 	
+	def "房屋编号有字母的成交信息应该能获取到"() {
+		when:
+			testCrawl(classes, 'http://sz.lianjia.com/chengjiao/SZFT91463128.html')
+			
+			then:
+				crawlData != null
+				crawlData.houseNo == 'SZFT91463128'
+	}
+	
 	
 }

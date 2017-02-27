@@ -26,4 +26,11 @@ class SpecialDailySalesDataTest extends SpecialDataTest<DailySalesData> {
 		then:
 		crawlData == null
 	}
+	
+	def "武汉地区的每日可销售数据应该能被抓取"() {
+		when:
+		testCrawl(classes, 'http://wh.lianjia.com/ershoufang/baibuting/')
+		then:
+		crawlData != null
+	}
 }

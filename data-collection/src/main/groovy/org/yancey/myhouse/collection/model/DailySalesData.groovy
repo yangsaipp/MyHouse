@@ -38,6 +38,6 @@ class DailySalesData extends BaseData implements AfterExtractor {
 		if(jiedao == null) {
 			page.setSkip(true)
 		}
-		this.afterCrawler()
+		this.afterCrawler(page)
 	}
 }

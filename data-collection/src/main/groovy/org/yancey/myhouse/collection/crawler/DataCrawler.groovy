@@ -15,7 +15,7 @@ public class DataCrawler {
 	 * 抓取数据
 	 */
 	static void crawl(PageModelPipeline pipeline, String... url) {
-		createSpider(pipeline, [DealData, DailySalesData, DealDataHelper]).addUrl(url).thread(5).run()
+		createSpider(pipeline, [DealData, DailySalesData, DealDataHelper]).addUrl(url).thread(7).run()
 	}
 	
 	/**
@@ -37,8 +37,11 @@ public class DataCrawler {
 				.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
 //				.setHttpProxyPool(getProxyPool(), true)
 				.addCookie("sz.lianjia.com","lianjia_uuid", "1dc08041-1df5-4580-a679-6e52b299a4ab")
-				.addCookie("sz.lianjia.com","_ga", "GA1.2.1982026924.1477054703")
-				.addCookie("sz.lianjia.com","lianjia_ssid", "546e47f9-80ee-4aee-b3c0-8dd735dc09ee")
+//				.addCookie("sz.lianjia.com","_ga", "GA1.2.1982026924.1477054703")
+				.addCookie("sz.lianjia.com","lianjia_ssid", "172d73db-e6cd-4c4c-b205-d3ae3372e269")
+				
+//				.addCookie("wh.lianjia.com","lianjia_uuid", "1dc08041-1df5-4580-a679-6e52b299a4ab")
+//				.addCookie("wh.lianjia.com","lianjia_ssid", "a9f4771a-18cb-4e61-9048-246768c4a8bf")
 				, pipeline, classes as Class[])
 	}
 	
@@ -54,6 +57,6 @@ public class DataCrawler {
 		
 //		crawl(new DBPipeline<Object>(), 'http://sz.lianjia.com/ershoufang/luohuqu/')
 //		crawl(new DBPipeline<Object>(), 'http://wh.lianjia.com/ershoufang/jiangan/')
-		crawl(new DBPipeline<Object>(), 'http://sz.lianjia.com/chengjiao/futianqu/pg1/')
+		crawl(new DBPipeline<Object>(), 'http://sz.lianjia.com/chengjiao/yantianqu/pg01/')
 	}
 }
