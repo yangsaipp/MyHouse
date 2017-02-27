@@ -6,5 +6,5 @@ bin/
 .classpath
 gradle.properties
 
-# help-doc
-db
+# help-doc/
+db/
