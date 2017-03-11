@@ -1,18 +1,16 @@
 package org.yancey.myhouse.collection.crawler
 
+import org.yancey.myhouse.collection.crawler.url.discovery.Condition;
+import org.yancey.myhouse.collection.model.DealData
 import org.yancey.myhouse.db.DBUtil
 
-import us.codecraft.webmagic.Task
-import us.codecraft.webmagic.pipeline.PageModelPipeline
-
-public class DealDataDBPipeline<DealData> implements PageModelPipeline<DealData> {
+public class DealDataDBPipeline extends DBPipeline<DealData> {
 	
 	@Override
-	public void process(DealData dealData, Task task) {
-		Date filterData = Date.parse("yyyy.MM.dd", "2017.01.06")
-		if(dealData.dealDate == filterData && DBUtil.isExist(dealData, 'houseNo')) {
-			return
+	boolean canAdd(DealData t) {
+		if(DBUtil.isExist(t, 'houseNo')) {
+			return false
 		}
-		DBUtil.add(dealData)
+		return true
 	}
 }

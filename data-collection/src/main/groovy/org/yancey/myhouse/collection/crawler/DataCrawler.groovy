@@ -1,12 +1,11 @@
 package org.yancey.myhouse.collection.crawler;
 
+import org.yancey.myhouse.collection.crawler.helper.DealDataHelper;
 import org.yancey.myhouse.collection.model.DailySalesData
 import org.yancey.myhouse.collection.model.DealData
-import org.yancey.myhouse.collection.model.DealDataHelper
 import org.yancey.myhouse.db.DBUtil
 
 import us.codecraft.webmagic.Site
-import us.codecraft.webmagic.Spider
 import us.codecraft.webmagic.model.OOSpider
 import us.codecraft.webmagic.pipeline.PageModelPipeline
 
@@ -16,6 +15,13 @@ public class DataCrawler {
 	 */
 	static void crawl(PageModelPipeline pipeline, String... url) {
 		createSpider(pipeline, [DealData, DailySalesData, DealDataHelper]).addUrl(url).thread(7).run()
+	}
+	
+	
+	static void ljCrawl(String... url) {
+		createSpider(new DealDataDBPipeline(), [DealData, DealDataHelper])
+		.addPageModel(new DailySalesDBPipeline(), DailySalesData)
+		.addUrl(url).thread(7).run()
 	}
 	
 	/**
@@ -32,7 +38,7 @@ public class DataCrawler {
 		createSpider(pipeline,classes).test(url)
 	}
 	
-	private static Spider createSpider(PageModelPipeline pipeline, List<Class> classes) {
+	private static OOSpider createSpider(PageModelPipeline pipeline, List<Class> classes) {
 		return OOSpider.create(Site.me()
 				.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
 //				.setHttpProxyPool(getProxyPool(), true)
@@ -40,8 +46,8 @@ public class DataCrawler {
 //				.addCookie("sz.lianjia.com","_ga", "GA1.2.1982026924.1477054703")
 				.addCookie("sz.lianjia.com","lianjia_ssid", "172d73db-e6cd-4c4c-b205-d3ae3372e269")
 				
-//				.addCookie("wh.lianjia.com","lianjia_uuid", "1dc08041-1df5-4580-a679-6e52b299a4ab")
-//				.addCookie("wh.lianjia.com","lianjia_ssid", "a9f4771a-18cb-4e61-9048-246768c4a8bf")
+				.addCookie("wh.lianjia.com","lianjia_uuid", "1dc08041-1df5-4580-a679-6e52b299a4ab")
+				.addCookie("wh.lianjia.com","lianjia_ssid", "a9f4771a-18cb-4e61-9048-246768c4a8bf")
 				, pipeline, classes as Class[])
 	}
 	
@@ -55,8 +61,10 @@ public class DataCrawler {
 		DBUtil.dbName = 'data.db'
 //		DBUtil.createTable(DealData, DailySalesData)
 		
-//		crawl(new DBPipeline<Object>(), 'http://sz.lianjia.com/ershoufang/luohuqu/')
-//		crawl(new DBPipeline<Object>(), 'http://wh.lianjia.com/ershoufang/jiangan/')
-		crawl(new DBPipeline<Object>(), 'http://sz.lianjia.com/chengjiao/yantianqu/pg01/')
+//		ljCrawl('http://sz.lianjia.com/ershoufang/luohuqu/')
+		ljCrawl('http://sz.lianjia.com/chengjiao/pg1/')
+		
+//		ljCrawl('http://wh.lianjia.com/ershoufang/jiangan/')
+//		ljCrawl('http://wh.lianjia.com/chengjiao/')
 	}
 }

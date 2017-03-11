@@ -13,8 +13,7 @@ import us.codecraft.webmagic.model.annotation.TargetUrl
  *
  */
 @Canonical
-@TargetUrl(value='http://*.lianjia.com/ershoufang/\\w+/', sourceRegion = '//div[@data-role="ershoufang"]/div[2]')
-@HelpUrl(value='http://*.lianjia.com/ershoufang/\\w+/', sourceRegion = '//div[@data-role="ershoufang"]/div[1]')
+@TargetUrl(value='http://*.lianjia.com/ershoufang/\\w+/', sourceRegion = '/none')
 class DailySalesData extends BaseData implements AfterExtractor {
 	/** 城市  */
 	@ExtractBy('//div[@class=\'contentBottom clear\']/div[@class=\'crumbs fl\']/a[2]/regex("<a.+>(.+)二手房</a>", 1)')

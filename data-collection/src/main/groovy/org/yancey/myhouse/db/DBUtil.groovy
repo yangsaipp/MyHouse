@@ -66,9 +66,21 @@ class DBUtil {
 		buffer.append(table);
 		if(fields) {
 			buffer.append(" where ");
+			boolean first = true;
 			for(String field : fields) {
-				buffer.append(" $field = ? ");
-				param << object[field]
+				if(first) {
+					first = false
+				}else {
+					buffer.append(" and ");
+				}
+				if(object[field] instanceof Date) {
+					buffer.append(" datetime($field) = ? ");
+					param << object[field].format('yyyy-MM-dd HH:mm:ss')
+				} else {
+					buffer.append(" $field = ? ");
+					param << object[field]
+				}
+				
 			}
 		}
 		StringBuilder paramBuffer = new StringBuilder();

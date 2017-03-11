@@ -5,7 +5,6 @@ import us.codecraft.webmagic.Page
 import us.codecraft.webmagic.model.AfterExtractor
 import us.codecraft.webmagic.model.annotation.ExtractBy
 import us.codecraft.webmagic.model.annotation.Formatter
-import us.codecraft.webmagic.model.annotation.HelpUrl
 import us.codecraft.webmagic.model.annotation.TargetUrl
 import us.codecraft.webmagic.model.formatter.DateFormatter
 
@@ -15,7 +14,7 @@ import us.codecraft.webmagic.model.formatter.DateFormatter
  *
  */
 @Canonical
-@TargetUrl('http://*.lianjia.com/chengjiao/\\w+.html$')
+@TargetUrl(value = 'http://*.lianjia.com/chengjiao/\\w+.html$', sourceRegion = '/none')
 class DealData extends BaseData implements AfterExtractor {
 	/** 城市 */
 	@ExtractBy('//div[@class=\'wrapper\']/div[@class=\'deal-bread\']/a[2]/regex("<a.+>(.+)二手房成交价格</a>", 1)')
@@ -75,12 +74,8 @@ class DealData extends BaseData implements AfterExtractor {
 	@ExtractBy('//div[@class=\'wrapper\']/div[@class=\'deal-bread\']/span[@class="house-code"]/regex("链家编号：(\\w+)", 1)')
 	String houseNo
 	
-	/** 页面地址 */
-	String url
-
 	@Override
 	public void afterProcess(Page page) {
-		this.url = page.getUrl()
 //		println page.getHtml().xpath('//div[@class=\'house-title\']/div[@class="wrapper"]/span/regex("<span.*>([\\d\\.]+)\\s链家成交</span>",1)').get() 
 //		println page.getHtml().xpath('//div[@class=\'overview\']/div[@class="info fr"]/div[@class="price"]/span[@class="dealTotalPrice"]/i/text()').all() 
 		this.afterCrawler(page)
