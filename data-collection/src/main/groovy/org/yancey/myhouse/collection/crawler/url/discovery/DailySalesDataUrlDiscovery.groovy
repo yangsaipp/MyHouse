@@ -29,7 +29,7 @@ public class DailySalesDataUrlDiscovery implements UrlDiscovery {
 			lstUrl.addAll(lstAreaUrl)
 		}
 		List<String> lstStreetUrl = getStreetUrl(page)
-		log.info("发现可抓取的销售数据页面: ${lstStreetUrl.size}个。")
+//		log.info("发现可抓取的销售数据页面: ${lstStreetUrl.size}个。")
 		if(!lstStreetUrl.isEmpty()) {
 			lstUrl.addAll(lstStreetUrl)
 		}
@@ -53,10 +53,11 @@ public class DailySalesDataUrlDiscovery implements UrlDiscovery {
 	 */
 	List<String> getStreetUrl(Page page) {
 		List<String> lstStreetUrl = []
-		List<String> url = page.getHtml().xpath('//div[@data-role="ershoufang"]/div[2]/a/@href').all()
-		url.each { 
-			if(!DBUtil.isExist(new DailySalesData(crawlerDate:new Date().clearTime(), url:it), 'crawlerDate', 'url')) {
-				lstStreetUrl << it
+		List<String> lstUrl = page.getHtml().xpath('//div[@data-role="ershoufang"]/div[2]/a/@href').all()
+		lstUrl.each { 
+			String url =  it + 'pg1/'
+			if(!DBUtil.isExist(new DailySalesData(crawlerDate:new Date().clearTime(), url:url), 'crawlerDate', 'url')) {
+				lstStreetUrl << url
 			}
 		}
 		return lstStreetUrl

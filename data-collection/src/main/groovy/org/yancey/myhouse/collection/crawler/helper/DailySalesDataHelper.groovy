@@ -19,13 +19,6 @@ import us.codecraft.webmagic.model.annotation.TargetUrl
 @groovy.util.logging.Log4j
 class DailySalesDataHelper extends DataHelper {
 	
-	UrlDiscovery ud = new DailySalesDataUrlDiscovery()
+	UrlDiscovery urlDiscovery = new DailySalesDataUrlDiscovery()
 	
-	void setUrlDiscovery(urlDiscovery) {
-		
-	}
-	
-	UrlDiscovery getUrlDiscovery() {
-		return getUrlDiscovery
-	}
 }

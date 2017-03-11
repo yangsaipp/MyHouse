@@ -1,6 +1,7 @@
 package org.yancey.myhouse.collection.crawler;
 
-import org.yancey.myhouse.collection.crawler.helper.DealDataHelper;
+import org.yancey.myhouse.collection.crawler.helper.DailySalesDataHelper
+import org.yancey.myhouse.collection.crawler.helper.DealDataHelper
 import org.yancey.myhouse.collection.model.DailySalesData
 import org.yancey.myhouse.collection.model.DealData
 import org.yancey.myhouse.db.DBUtil
@@ -20,7 +21,7 @@ public class DataCrawler {
 	
 	static void ljCrawl(String... url) {
 		createSpider(new DealDataDBPipeline(), [DealData, DealDataHelper])
-		.addPageModel(new DailySalesDBPipeline(), DailySalesData)
+		.addPageModel(new DailySalesDBPipeline(), DailySalesData, DailySalesDataHelper)
 		.addUrl(url).thread(7).run()
 	}
 	
@@ -60,11 +61,11 @@ public class DataCrawler {
 	static void main(String[] args) {
 		DBUtil.dbName = 'data.db'
 //		DBUtil.createTable(DealData, DailySalesData)
-		
+		// 销售数据
+//		ljCrawl('http://sz.lianjia.com/chengjiao/pg1/')
+//		ljCrawl('http://wh.lianjia.com/chengjiao/pg1/')
+		// 成交数据
 //		ljCrawl('http://sz.lianjia.com/ershoufang/luohuqu/')
-		ljCrawl('http://sz.lianjia.com/chengjiao/pg1/')
-		
-//		ljCrawl('http://wh.lianjia.com/ershoufang/jiangan/')
-//		ljCrawl('http://wh.lianjia.com/chengjiao/')
+		ljCrawl('http://wh.lianjia.com/ershoufang/jiangan/')
 	}
 }

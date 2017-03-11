@@ -49,9 +49,9 @@ class AssignPageNo extends DealDataUrlDiscovery {
 	List<String> getDetailUrl(Page page) {
 		List<String> lstDetailUrl = []
 		List<String> detailUrl = page.getHtml().xpath("//div[@class=\"leftContent\"]/ul[@class='listContent']/li/a[@class='img']/@href").all()
-		detailUrl.each {
-			if(!DBUtil.isExist(new DealData(url: it), 'url')) {
-				lstDetailUrl << it
+		detailUrl.each {url->
+			if(!DBUtil.isExist(new DealData(url: url), 'url')) {
+				lstDetailUrl << url
 			}
 		}
 		return lstDetailUrl
