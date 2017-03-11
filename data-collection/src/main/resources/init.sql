@@ -5,6 +5,7 @@ create table if not exists DailySalesData (
 	jiedao String,
 	num Integer,
 	crawlerDate Date ,
+	url String,
 	createTime Timestamp
 );
 create table if not exists DealData (
