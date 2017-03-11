@@ -2,6 +2,7 @@ package org.yancey.myhouse.collection.crawler;
 
 import org.yancey.myhouse.collection.crawler.helper.DailySalesDataHelper
 import org.yancey.myhouse.collection.crawler.helper.DealDataHelper
+import org.yancey.myhouse.collection.crawler.url.discovery.Condition
 import org.yancey.myhouse.collection.model.DailySalesData
 import org.yancey.myhouse.collection.model.DealData
 import org.yancey.myhouse.db.DBUtil
@@ -62,10 +63,11 @@ public class DataCrawler {
 		DBUtil.dbName = 'data.db'
 //		DBUtil.createTable(DealData, DailySalesData)
 		// 销售数据
+		Condition.dealPageNo = 30
 //		ljCrawl('http://sz.lianjia.com/chengjiao/pg1/')
-//		ljCrawl('http://wh.lianjia.com/chengjiao/pg1/')
+		ljCrawl('http://wh.lianjia.com/chengjiao/pg100/')
 		// 成交数据
 //		ljCrawl('http://sz.lianjia.com/ershoufang/luohuqu/')
-		ljCrawl('http://wh.lianjia.com/ershoufang/jiangan/')
+//		ljCrawl('http://wh.lianjia.com/ershoufang/jiangan/')
 	}
 }

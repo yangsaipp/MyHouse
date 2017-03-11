@@ -34,6 +34,7 @@ class AssignPageNo extends DealDataUrlDiscovery {
 		int curPage = pageNoInfo.curPage
 		int totalPage = pageNoInfo.totalPage
 		if(curPage == totalPage){		// 最后一页
+			log.info("已到列表最后一页，列表总页数：$totalPage")
 			return null;
 		}
 		
