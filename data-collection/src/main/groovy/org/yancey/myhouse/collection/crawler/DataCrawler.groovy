@@ -64,8 +64,8 @@ public class DataCrawler {
 //		DBUtil.createTable(DealData, DailySalesData)
 		// 销售数据
 		Condition.dealPageNo = 30
-//		ljCrawl('http://sz.lianjia.com/chengjiao/pg1/')
-		ljCrawl('http://wh.lianjia.com/chengjiao/pg100/')
+		ljCrawl('http://sz.lianjia.com/chengjiao/pg10/')
+//		ljCrawl('http://wh.lianjia.com/chengjiao/pg100/')
 		// 成交数据
 //		ljCrawl('http://sz.lianjia.com/ershoufang/luohuqu/')
 //		ljCrawl('http://wh.lianjia.com/ershoufang/jiangan/')

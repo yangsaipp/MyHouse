@@ -17,11 +17,6 @@ public class DailySalesDataUrlDiscovery implements UrlDiscovery {
 	
 	@Override
 	List<String> discoverUrl(Page page) {
-		if('验证异常流量-链家网' == page.getHtml().xpath('//title/text()').get()) {
-			log.error("验证异常流量，网页：${page.url}")
-			throw new RuntimeException("验证异常流量，网页：${page.url}")
-		}
-		
 		List<String> lstUrl = []
 		List<String> lstAreaUrl = getAreaUrl(page)
 		log.info("发现可抓取数据的销售区域: ${lstAreaUrl.size}个。")

@@ -19,7 +19,7 @@ class BaseData {
 	public void afterCrawler(Page page) {
 		if('验证异常流量-链家网' == page.getHtml().xpath('//title/text()').get()) {
 			log.error("验证异常流量，网页：${page.url}")
-			throw new RuntimeException("验证异常流量，网页：${page.url}")
+//			throw new RuntimeException("验证异常流量，网页：${page.url}")
 		}
 		id = UUID.randomUUID().toString(); 
 		createTime = new Timestamp(new Date().getTime())

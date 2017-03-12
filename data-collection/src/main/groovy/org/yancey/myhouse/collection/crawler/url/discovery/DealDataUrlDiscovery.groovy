@@ -23,11 +23,6 @@ abstract class DealDataUrlDiscovery implements UrlDiscovery {
 	
 	@Override
 	List<String> discoverUrl(Page page) {
-		if('验证异常流量-链家网' == page.getHtml().xpath('//title/text()').get()) {
-			log.error("验证异常流量，网页：${page.url}")
-			throw new RuntimeException("验证异常流量，网页：${page.url}")
-		}
-		
 		List<String> lstUrl = []
 		String nextPageUrl = getNextPageUrl(page)
 		if(nextPageUrl) {
