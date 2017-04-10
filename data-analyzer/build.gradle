@@ -12,10 +12,7 @@ buildscript {
 	ext { springBootVersion = '1.5.1.RELEASE' }
 	repositories {
 		// NOTE: You should declare only repositories that you need here
-		maven { url "http://repo.spring.io/release" }
-		maven { url "http://repo.spring.io/milestone" }
-		maven { url "http://repo.spring.io/snapshot" }
-		jcenter()
+		maven{url "http://maven.aliyun.com/nexus/content/groups/public"}
 	}
 	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
 }
@@ -41,9 +38,11 @@ dependencies {
 	compile 'org.codehaus.groovy:groovy-all:2.4.5'
 	compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'
 	runtime group: 'org.xerial', name: 'sqlite-jdbc', version: '3.16.1'
-	compile("org.springframework.boot:spring-boot-starter")
+	compile("org.springframework.boot:spring-boot-starter-web")
 	compile 'com.alibaba:fastjson:1.2.24'
+	runtime('org.springframework.boot:spring-boot-devtools')
 	
 	testCompile("org.spockframework:spock-core:1.0-groovy-2.4") { exclude group: "org.codehaus.groovy" }
 //	testCompile group: 'cglib', name: 'cglib-nodep', version: '3.2.4'
+	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

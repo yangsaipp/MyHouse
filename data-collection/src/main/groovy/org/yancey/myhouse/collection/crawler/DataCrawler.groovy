@@ -42,14 +42,14 @@ public class DataCrawler {
 	
 	private static OOSpider createSpider(PageModelPipeline pipeline, List<Class> classes) {
 		return OOSpider.create(Site.me()
-				.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
+				.setUserAgent("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36")
 //				.setHttpProxyPool(getProxyPool(), true)
-				.addCookie("sz.lianjia.com","lianjia_uuid", "1dc08041-1df5-4580-a679-6e52b299a4ab")
+				.addCookie("sz.lianjia.com","lianjia_uuid", "5f559023-48b6-4343-8f0f-77f3f91adf7d")
 //				.addCookie("sz.lianjia.com","_ga", "GA1.2.1982026924.1477054703")
-				.addCookie("sz.lianjia.com","lianjia_ssid", "172d73db-e6cd-4c4c-b205-d3ae3372e269")
+				.addCookie("sz.lianjia.com","lianjia_ssid", "6ff0ba7c-9b20-4e43-a6bd-156352496bf6")
 				
-				.addCookie("wh.lianjia.com","lianjia_uuid", "1dc08041-1df5-4580-a679-6e52b299a4ab")
-				.addCookie("wh.lianjia.com","lianjia_ssid", "a9f4771a-18cb-4e61-9048-246768c4a8bf")
+				.addCookie("wh.lianjia.com","lianjia_uuid", "5f559023-48b6-4343-8f0f-77f3f91adf7d")
+				.addCookie("wh.lianjia.com","lianjia_ssid", "e2f0b99f-eb15-4a1f-bbf2-5e7202e419ab")
 				, pipeline, classes as Class[])
 	}
 	
@@ -62,12 +62,12 @@ public class DataCrawler {
 	static void main(String[] args) {
 		DBUtil.dbName = 'data.db'
 //		DBUtil.createTable(DealData, DailySalesData)
-		// 销售数据
-		Condition.dealPageNo = 30
-		ljCrawl('http://sz.lianjia.com/chengjiao/pg10/')
-//		ljCrawl('http://wh.lianjia.com/chengjiao/pg100/')
 		// 成交数据
-//		ljCrawl('http://sz.lianjia.com/ershoufang/luohuqu/')
-//		ljCrawl('http://wh.lianjia.com/ershoufang/jiangan/')
+		Condition.dealPageNo = 30
+//		ljCrawl('http://sz.lianjia.com/chengjiao/pg1/')
+//		ljCrawl('http://wh.lianjia.com/chengjiao/pg1/')
+		// 销售数据
+		ljCrawl('http://sz.lianjia.com/ershoufang/luohuqu/','http://wh.lianjia.com/ershoufang/jiangan/')
+//		ljCrawl()
 	}
 }
