@@ -44,12 +44,12 @@ public class DataCrawler {
 		return OOSpider.create(Site.me()
 				.setUserAgent("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36")
 //				.setHttpProxyPool(getProxyPool(), true)
-				.addCookie("sz.lianjia.com","lianjia_uuid", "5f559023-48b6-4343-8f0f-77f3f91adf7d")
+				.addCookie("sz.lianjia.com","lianjia_uuid", "8b08238b-1831-4a28-99a4-8369c29cf286")
 //				.addCookie("sz.lianjia.com","_ga", "GA1.2.1982026924.1477054703")
-				.addCookie("sz.lianjia.com","lianjia_ssid", "6ff0ba7c-9b20-4e43-a6bd-156352496bf6")
+				.addCookie("sz.lianjia.com","lianjia_ssid", "47a86195-9df4-4a5c-b8bd-b0be64731c99")
 				
-				.addCookie("wh.lianjia.com","lianjia_uuid", "5f559023-48b6-4343-8f0f-77f3f91adf7d")
-				.addCookie("wh.lianjia.com","lianjia_ssid", "e2f0b99f-eb15-4a1f-bbf2-5e7202e419ab")
+				.addCookie("wh.lianjia.com","lianjia_uuid", "8b08238b-1831-4a28-99a4-8369c29cf286")
+				.addCookie("wh.lianjia.com","lianjia_ssid", "43f8438e-2352-4d02-abd0-0ab1b7711649")
 				, pipeline, classes as Class[])
 	}
 	

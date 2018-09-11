@@ -7,7 +7,7 @@ import us.codecraft.webmagic.Task
 import us.codecraft.webmagic.pipeline.PageModelPipeline
 
 @groovy.util.logging.Log4j
-public abstract class DBPipeline<T extends BaseData> implements PageModelPipeline<T> {
+public class DBPipeline<T extends BaseData> implements PageModelPipeline<T> {
 	
 	@Override
 	public void process(T t, Task task) {
@@ -17,5 +17,7 @@ public abstract class DBPipeline<T extends BaseData> implements PageModelPipelin
 		} 
 	}
 	
-	abstract boolean canAdd(T t)
+	public boolean canAdd(T t) {
+		return true
+	}
 }
