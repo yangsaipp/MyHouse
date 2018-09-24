@@ -2,13 +2,15 @@ package org.yancey.myhouse.gzf.collection;
 
 import org.apache.http.NameValuePair
 import org.apache.http.message.BasicNameValuePair
-import org.yancey.myhouse.collection.crawler.DBPipeline
 import org.yancey.myhouse.db.DBUtil
 import org.yancey.myhouse.gzf.collection.model.ProposerFamilyInfo
 import org.yancey.myhouse.gzf.collection.model.ProposerInfo
+import org.yancey.myhouse.gzf.collection.model.ProposerInfoDetailVO
+import org.yancey.myhouse.gzf.collection.model.ProposerInfoPageVO
 
 import us.codecraft.webmagic.Request
 import us.codecraft.webmagic.Site
+import us.codecraft.webmagic.Task
 import us.codecraft.webmagic.model.OOSpider
 import us.codecraft.webmagic.pipeline.PageModelPipeline
 import us.codecraft.webmagic.utils.HttpConstant
@@ -17,9 +19,14 @@ public class DataCrawler {
 	
 	
 	static void gzfCrawl(Request... requests) {
-		createSpider(new DBPipeline<ProposerInfo>(), [ProposerInfo])
-		.addPageModel(new DBPipeline<ProposerFamilyInfo>(), ProposerFamilyInfo)
-		.addRequest(requests).thread(7).run()
+		createSpider(new PageModelPipeline<Object>() {
+			@Override
+			public void process(Object t, Task task) {
+				//
+			}
+		}, [ProposerInfoDetailVO, ProposerInfoPageVO])
+//		.addPageModel(new MyDBPipeline<ProposerInfoPageVO>(), ProposerInfoPageVO)
+		.addRequest(requests).thread(10).run()
 	}
 	
 	private static OOSpider createSpider(PageModelPipeline pipeline, List<Class> classes) {
@@ -42,8 +49,8 @@ public class DataCrawler {
 		String url = null;
 		Map<String, Object> nameValuePair = new HashMap<String, Object>();
 		NameValuePair[] values = new NameValuePair[7];
-		values[0] = new BasicNameValuePair("pageNumber", "1");
-		values[1] = new BasicNameValuePair("pageSize", "10");
+		values[0] = new BasicNameValuePair("pageNumber", "4");
+		values[1] = new BasicNameValuePair("pageSize", "100");
 		values[2] = new BasicNameValuePair("waittype", "2");
 		values[3] = new BasicNameValuePair("num", "0");
 		values[4] = new BasicNameValuePair("shoulbahzh", "");
@@ -51,6 +58,7 @@ public class DataCrawler {
 		values[6] = new BasicNameValuePair("idcard", "");
 		nameValuePair.put("nameValuePair", values);
 		url = "http://bzflh.szjs.gov.cn/TylhW/lhmcAction.do?method=queryYgbLhmcList";
+//		url = "http://bzflh.szjs.gov.cn/TylhW/lhmcAction.do?method=queryDetailLhc&lhmcId=3956378&waittype=2";
 		Request request = new Request(url);
 		request.setExtras(nameValuePair);
 		request.setMethod(HttpConstant.Method.POST);

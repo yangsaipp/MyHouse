@@ -51,8 +51,12 @@ class DBUtil {
 	}
 	
 	static boolean executeSqlFile(File sqlFile) {
-		println sqlFile.getText()
-		getSql().execute(sqlFile.getText())
+		execute(sqlFile.getText())
+	}
+	
+	static boolean execute(String sql) {
+		println sql;
+		getSql().execute(sql);
 	}
 	
 	static boolean isExist(object, String... fields) {

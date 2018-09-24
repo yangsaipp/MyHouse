@@ -2,6 +2,8 @@ package org.yancey.myhouse.collection.model;
 
 import java.sql.Timestamp
 
+import org.yancey.myhouse.db.DBUtil
+
 import us.codecraft.webmagic.Page
 
 @groovy.util.logging.Log4j
@@ -24,5 +26,9 @@ class BaseData {
 		id = UUID.randomUUID().toString(); 
 		createTime = new Timestamp(new Date().getTime())
 		url = page.getUrl()
+	}
+	
+	void save() {
+		DBUtil.add(this);
 	}
 }

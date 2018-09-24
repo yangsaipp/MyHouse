@@ -1,11 +1,9 @@
 package org.yancey.myhouse.gzf.collection.model
 
 import org.yancey.myhouse.collection.model.BaseData
+import org.yancey.myhouse.db.DBUtil
 
 import groovy.transform.Canonical
-import us.codecraft.webmagic.Page
-import us.codecraft.webmagic.model.AfterExtractor
-import us.codecraft.webmagic.model.annotation.TargetUrl
 
 /**
  * 公租房申请人家庭成员信息
@@ -13,8 +11,8 @@ import us.codecraft.webmagic.model.annotation.TargetUrl
  *
  */
 @Canonical
-@TargetUrl(value = 'http://bzflh.szjs.gov.cn/TylhW/lhmcAction.do\\?method=queryDetailLhc*', sourceRegion = '/none')
-class ProposerFamilyInfo extends BaseData implements AfterExtractor{
+@groovy.util.logging.Log4j
+class ProposerFamilyInfo extends BaseData {
 	String GX
 	String XM
 	String SFZH
@@ -23,8 +21,11 @@ class ProposerFamilyInfo extends BaseData implements AfterExtractor{
 	String LHMC_ID
 	
 	@Override
-	public void afterProcess(Page page) {
-		println("ssssssssss=======")
-		//		this.afterCrawler(page)
+	public void save() {
+		if(!DBUtil.isExist(this, 'XM')) {
+			super.save();
+		}else {
+			log.info("数据库存在相同家庭成员信息。姓名=${this.XM}, LHMC_ID=${this.LHMC_ID}");
+		}
 	}
 }
